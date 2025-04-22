@@ -1,0 +1,32 @@
+name: Streamlit Gemini Notebook CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas==1.5.3
+          pip install numpy==1.24.2
+          pip install streamlit==1.31.1
+          pip install google-generativeai==0.2.2
+
+      - name: Check for app.ipynb
+        run: |
+          test -f app.ipynb && echo "✅ Notebook exists!" || echo "❌ Notebook not found"
